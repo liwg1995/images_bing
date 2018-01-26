@@ -19,8 +19,9 @@ def get_url():
     url = "https://www.bing.com" + response.json()['images'][0]['url']
     image_name = response.json()['images'][0]['copyright'].split('(')[0] + '.jpg'
     # return url, image_name
+    time = datetime.datetime.now()
 
-    file_path = './images'
+    file_path = './images/{}-{}-{}'.format(time.year, time.month, time.day)
     try:
         if not os.path.exists(file_path):
             print('文件夹', file_path, '不存在，重新建立')
@@ -39,8 +40,8 @@ def push_qiniu():
     image_name = get_url()
 
     # 七牛云的accesskey以及secretkey
-    access_key = "#####"
-    secret_key = "#####"
+    access_key = "####"
+    secret_key = "####"
 
     # 上传至七牛云的文件名
     time = datetime.datetime.now()
@@ -51,7 +52,7 @@ def push_qiniu():
     q = Auth(access_key, secret_key)
 
     # 七牛云的存储名字
-    bucket_name = "#####"
+    bucket_name = "####"
 
     # 上传
     token = q.upload_token(bucket_name, key, 3600)
