@@ -17,7 +17,9 @@ ssl._create_default_https_context = ssl._create_unverified_context
 def get_url():
     response = requests.get(start_url)
     url = "https://www.bing.com" + response.json()['images'][0]['url']
-    image_name = response.json()['images'][0]['copyright'].split('(')[0] + '.jpg'
+    print (url)
+    image_name = response.json()['images'][0]['copyright'].split('（')[0] + '.jpg'
+    print (image_name) 
     # return url, image_name
     time = datetime.datetime.now()
 
@@ -32,16 +34,18 @@ def get_url():
         print('文件操作失败', e)
     except Exception as e:
         print('错误 ：', e)
-
-    return image_name
+     
+    dates = '{}-{}-{}'.format(time.year, time.month, time.day)
+    qiniu_url = 'https://resources.olei.me/bing_images/{}/'.format(dates) + image_name
+    return image_name,url,qiniu_url,dates
 
 
 def push_qiniu():
-    image_name = get_url()
+    image_name = get_url()[0]
 
     # 七牛云的accesskey以及secretkey
-    access_key = "####"
-    secret_key = "####"
+    access_key = "QxR4DsIF-JaA5-WY4j6JZVnGlS6KUnEubOE5C8HP"
+    secret_key = "prMuv9EtxpfjzgOio3_MCiDrj9FEZiZB95na0CDT"
 
     # 上传至七牛云的文件名
     time = datetime.datetime.now()
@@ -52,17 +56,16 @@ def push_qiniu():
     q = Auth(access_key, secret_key)
 
     # 七牛云的存储名字
-    bucket_name = "####"
+    bucket_name = "lwg-cunchu"
 
     # 上传
     token = q.upload_token(bucket_name, key, 3600)
-    local_image = "./images/{}".format(image_name)
+    local_image = "./images/{}-{}-{}/{}".format(time.year, time.month, time.day, image_name)
     ret, info = put_file(token, key, local_image)
     print(info)
     assert ret['key'] == key
     assert ret['hash'] == etag(local_image)
 
 
-if __name__ == '__main__':
     # get_url()
-    push_qiniu()
+    #push_qiniu()
