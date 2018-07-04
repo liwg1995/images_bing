@@ -44,8 +44,8 @@ def push_qiniu():
     image_name = get_url()[0]
 
     # 七牛云的accesskey以及secretkey
-    access_key = "QxR4DsIF-JaA5-WY4j6JZVnGlS6KUnEubOE5C8HP"
-    secret_key = "prMuv9EtxpfjzgOio3_MCiDrj9FEZiZB95na0CDT"
+    access_key = "xxx"
+    secret_key = "xxx"
 
     # 上传至七牛云的文件名
     time = datetime.datetime.now()
